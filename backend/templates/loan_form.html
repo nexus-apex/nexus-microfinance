@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}New{% endif %} Loan | NexusMFI{% endblock %}
+{% block page_title %}{% if editing %}Edit Loan{% else %}New Loan{% endif %}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:750px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">
+        <label>Loan Id</label>
+        <input type="text" name="loan_id" value="{{ record.loan_id|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Borrower Name</label>
+        <input type="text" name="borrower_name" value="{{ record.borrower_name|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Amount</label>
+        <input type="number" step="0.01" name="amount" value="{{ record.amount|default:'0' }}">
+      </div>
+      <div class="form-group">
+        <label>Interest Rate</label>
+        <input type="number" step="0.01" name="interest_rate" value="{{ record.interest_rate|default:'0' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Tenure Months</label>
+        <input type="number" name="tenure_months" value="{{ record.tenure_months|default:'0' }}">
+      </div>
+      <div class="form-group">
+        <label>Emi</label>
+        <input type="number" step="0.01" name="emi" value="{{ record.emi|default:'0' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="applied" {% if record.status == 'applied' %}selected{% endif %}>Applied</option>
+          <option value="approved" {% if record.status == 'approved' %}selected{% endif %}>Approved</option>
+          <option value="disbursed" {% if record.status == 'disbursed' %}selected{% endif %}>Disbursed</option>
+          <option value="closed" {% if record.status == 'closed' %}selected{% endif %}>Closed</option>
+          <option value="defaulted" {% if record.status == 'defaulted' %}selected{% endif %}>Defaulted</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Disbursed Date</label>
+        <input type="date" name="disbursed_date" value="{{ record.disbursed_date|date:'Y-m-d'|default:'' }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Purpose</label>
+      <textarea name="purpose">{{ record.purpose|default:'' }}</textarea>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Create{% endif %} Loan</button>
+      <a href="/loans/" class="btn" style="background:var(--border);color:var(--text)">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | NexusMFI{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-label">Total Loans</div>
+    <div class="stat-value">{{ loan_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Total Borrowers</div>
+    <div class="stat-value" style="background:linear-gradient(135deg,#10b981,#06b6d4);-webkit-background-clip:text;background-clip:text">{{ borrower_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Total Loanpayments</div>
+    <div class="stat-value" style="background:linear-gradient(135deg,#f59e0b,#f97316);-webkit-background-clip:text;background-clip:text">{{ loanpayment_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Total Amount</div>
+    <div class="stat-value" style="background:linear-gradient(135deg,#ef4444,#ec4899);-webkit-background-clip:text;background-clip:text">{{ loan_total_amount|floatformat:0 }}</div>
+  </div>
+</div>
+
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+    <h3>Recent Loans</h3>
+    <a href="/loans/create/" class="btn btn-primary btn-sm">+ New Loan</a>
+  </div>
+  {% if recent %}
+  <table>
+    <thead>
+      <tr><th>Loan Id</th><th>Borrower Name</th><th>Amount</th><th>Interest Rate</th><th>Tenure Months</th><th>Created</th></tr>
+    </thead>
+    <tbody>
+      {% for r in recent %}
+      <tr>
+        <td><a href="/loans/{{ r.pk }}/edit/">{{ r.loan_id }}</a></td>
+        <td>{{ r.borrower_name|default:"-" }}</td><td>{{ r.amount|floatformat:2 }}</td><td>{{ r.interest_rate|floatformat:2 }}</td><td>{{ r.tenure_months|default:"-" }}</td><td style="color:var(--muted)">{{ r.created_at|date:"M d, Y" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">
+    <p>No records yet.</p>
+    <a href="/loans/create/" class="btn btn-primary" style="margin-top:1rem">Create First Loan</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
